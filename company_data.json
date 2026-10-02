@@ -1,0 +1,54 @@
+{
+  "company": {
+    "name": "Meridian Technologies",
+    "founded": 2011,
+    "headquarters": "Austin, Texas",
+    "employees": 1240,
+    "industry": "Enterprise Software"
+  },
+  "leadership": {
+    "ceo": "Rachel Okafor",
+    "cto": "Daniel Park",
+    "ciso": "Maria Santos",
+    "cfo": "James Whitfield"
+  },
+  "products": {
+    "flagship": "Meridian Cloud Platform",
+    "description": "A multi-tenant SaaS platform for workflow automation and data orchestration",
+    "pricing_tiers": ["Starter", "Professional", "Enterprise"],
+    "supported_regions": ["us-east-1", "eu-west-1", "ap-southeast-1"]
+  },
+  "security": {
+    "compliance": ["SOC 2 Type II", "ISO 27001", "GDPR"],
+    "authentication": {
+      "provider": "Okta",
+      "mfa_required": true,
+      "session_timeout_minutes": 60,
+      "allowed_methods": ["TOTP", "FIDO2", "SMS"]
+    },
+    "encryption": {
+      "data_at_rest": "AES-256",
+      "data_in_transit": "TLS 1.3",
+      "key_management": "AWS KMS"
+    },
+    "vulnerability_scanning": {
+      "frequency": "weekly",
+      "tool": "Snyk",
+      "critical_sla_hours": 24,
+      "high_sla_hours": 72
+    }
+  },
+  "engineering": {
+    "primary_languages": ["Python", "TypeScript", "Go"],
+    "ci_cd": "GitHub Actions",
+    "deployment": "Kubernetes on EKS",
+    "on_call_rotation_days": 7,
+    "incident_severity_levels": ["P0", "P1", "P2", "P3"]
+  },
+  "hr": {
+    "pto_days_per_year": 20,
+    "parental_leave_weeks": 16,
+    "remote_policy": "Fully remote with optional office access",
+    "performance_review_cycle": "semi-annual"
+  }
+}

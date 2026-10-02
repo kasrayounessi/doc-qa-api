@@ -1,0 +1,41 @@
+[project]
+name = "doc-qa-api"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.111.0",
+    "uvicorn[standard]>=0.29.0",
+    "pydantic>=2.7.0",
+    "pydantic-settings>=2.2.0",
+    "langchain>=0.2.0",
+    "langchain-openai>=0.1.0",
+    "langchain-community>=0.2.0",
+    "langchain-text-splitters>=0.2.0",
+    "faiss-cpu>=1.8.0",
+    "pypdf>=4.2.0",
+    "python-multipart>=0.0.9",
+    "openai>=1.30.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.2.0",
+    "pytest-asyncio>=0.23.0",
+    "httpx>=0.27.0",
+    "reportlab>=4.1.0",
+    "pytest-mock>=3.14.0",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+filterwarnings = [
+    "ignore::DeprecationWarning:langchain_community",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["app", "scripts"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

@@ -1,0 +1,8 @@
+[
+  { "id": "q1", "question": "Who is the CTO?" },
+  { "id": "q2", "question": "What compliance certifications does the company hold?" },
+  { "id": "q3", "question": "What encryption standard is used for data at rest?" },
+  { "id": "q4", "question": "How many PTO days do employees get per year?" },
+  { "id": "q5", "question": "What is the SLA for fixing critical vulnerabilities?" },
+  { "id": "q6", "question": "What is the company's stock ticker symbol?" }
+]

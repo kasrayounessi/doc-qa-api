@@ -1,0 +1,34 @@
+[
+  {
+    "id": "q1",
+    "question": "What is the minimum password length required?"
+  },
+  {
+    "id": "q2",
+    "question": "Is multi-factor authentication required, and if so for which users?"
+  },
+  {
+    "id": "q3",
+    "question": "How often must employees complete security awareness training?"
+  },
+  {
+    "id": "q4",
+    "question": "What is the maximum number of failed login attempts before an account is locked?"
+  },
+  {
+    "id": "q5",
+    "question": "Which data classification levels does the policy define?"
+  },
+  {
+    "id": "q6",
+    "question": "What is the policy on using personal devices for work?"
+  },
+  {
+    "id": "q7",
+    "question": "What is the CEO's annual salary?"
+  },
+  {
+    "id": "q8",
+    "question": "How long are security incident logs retained?"
+  }
+]

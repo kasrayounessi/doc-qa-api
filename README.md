@@ -53,16 +53,18 @@ The document is parsed, chunked, and embedded **once per request**. All question
 
 ### Prerequisites
 
-- Python 3.11+
-- An OpenAI API key
+- Python 3.11+ and an OpenAI API key _(API-only path)_
+- Docker and Docker Compose _(full-stack path)_
 
-### Local install
+---
+
+### Option A — API only (Python, no Docker)
 
 The project requires Python 3.11+. macOS ships with Python 3.9; use the
 Homebrew-installed Python 3.12 (or later) explicitly.
 
 ```bash
-git clone <repo>
+git clone https://github.com/kasrayounessi/doc-qa-api.git
 cd doc-qa-api
 
 # Use the Homebrew Python — NOT the macOS system Python
@@ -82,18 +84,67 @@ cp .env.example .env
 
 ---
 
+### Option B — Full stack: API + React client (requires Docker)
+
+```bash
+git clone https://github.com/kasrayounessi/doc-qa-api.git
+cd doc-qa-api
+
+cp .env.example .env
+# Edit .env and set OPENAI_API_KEY=sk-...
+
+docker compose up --build
+```
+
+- API: `http://localhost:8000`
+- Client: `http://localhost:3000`
+
+Both services build and start with the single command above. The API image compiles `faiss-cpu` natively (gcc/g++ installed inside the container); expect a 2–3 minute first build.
+
+---
+
+### Local client development (no Docker)
+
+If you want to iterate on the React UI without rebuilding Docker images:
+
+```bash
+# Terminal 1 — start the API
+uvicorn app.main:app --reload
+
+# Terminal 2 — start the Vite dev server
+cd client && npm install && npm run dev
+```
+
+The Vite dev server proxies all `/v1` requests to `http://localhost:8000`, so no CORS configuration is needed. Visit `http://localhost:5173`.
+
+---
+
+## React Client
+
+The client lives in `client/` and is a plain Vite + React app with no UI framework dependencies.
+
+**UI flow:**
+1. Select a **document** (PDF or JSON) — or click one of the sample buttons to load the bundled fixtures.
+2. Select a **questions file** (JSON array) — or click a sample.
+3. Click **Ask**. A loading spinner appears while the API processes the request.
+4. Answers render as cards: question, grounded answer, and source chips (page number for PDFs, JSON path for JSON documents).
+
+The bundled sample documents are `pdf_sample.pdf` and `json_sample.json` (served from `client/public/samples/`). Clicking a sample button fetches the file client-side and feeds it through the same upload path as a manually chosen file.
+
+---
+
 ## Environment Variables
 
-| Variable | Default | Description |
-|---|---|---|
-| `OPENAI_API_KEY` | *(required)* | OpenAI API key for embeddings and generation |
-| `GENERATION_MODEL` | `gpt-4o-mini` | LLM used for answer generation |
-| `EMBEDDING_MODEL` | `text-embedding-3-small` | Embedding model for vector indexing |
-| `CHUNK_SIZE` | `1000` | Maximum characters per text chunk |
-| `CHUNK_OVERLAP` | `150` | Character overlap between adjacent chunks |
-| `RETRIEVAL_TOP_K` | `4` | Number of chunks retrieved per question |
-| `MAX_UPLOAD_SIZE_MB` | `50` | Maximum document upload size in megabytes |
-| `LOG_LEVEL` | `INFO` | Python logging level |
+| Variable             | Default                  | Description                                  |
+| -------------------- | ------------------------ | -------------------------------------------- |
+| `OPENAI_API_KEY`     | _(required)_             | OpenAI API key for embeddings and generation |
+| `GENERATION_MODEL`   | `gpt-4o-mini`            | LLM used for answer generation               |
+| `EMBEDDING_MODEL`    | `text-embedding-3-small` | Embedding model for vector indexing          |
+| `CHUNK_SIZE`         | `1000`                   | Maximum characters per text chunk            |
+| `CHUNK_OVERLAP`      | `150`                    | Character overlap between adjacent chunks    |
+| `RETRIEVAL_TOP_K`    | `4`                      | Number of chunks retrieved per question      |
+| `MAX_UPLOAD_SIZE_MB` | `50`                     | Maximum document upload size in megabytes    |
+| `LOG_LEVEL`          | `INFO`                   | Python logging level                         |
 
 ---
 
@@ -111,8 +162,8 @@ The service starts at `http://localhost:8000`.
 
 ```bash
 curl -X POST http://localhost:8000/v1/qa \
-  -F "document_file=@security_policy.pdf" \
-  -F "questions_file=@questions.json"
+  -F "document_file=@client/public/samples/pdf_sample.pdf" \
+  -F "questions_file=@client/public/samples/pdf_questions.json"
 ```
 
 **questions.json** — Format A (with IDs):
@@ -127,10 +178,7 @@ curl -X POST http://localhost:8000/v1/qa \
 **questions.json** — Format B (strings only):
 
 ```json
-[
-  "What is the company password policy?",
-  "Is MFA required?"
-]
+["What is the company password policy?", "Is MFA required?"]
 ```
 
 Both formats are accepted and normalized internally.
@@ -223,6 +271,14 @@ The deterministic retrieval section uses hash-seeded embeddings and tests that s
 ---
 
 ## Docker
+
+**Full stack (API + React client) — recommended:**
+
+```bash
+docker compose up --build
+```
+
+**API only:**
 
 ```bash
 docker build -t document-qa .
